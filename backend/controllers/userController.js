@@ -68,56 +68,86 @@ const login = async (req, res) => {
     }
 };
 
-const joinCommunity=async(req,res)=>{
-    const {communityId}=req.query;
+const joinCommunity = async (req, res) => {
+    const { communityId } = req.query;
     console.log(communityId);
 
-    try{
-        await userService.joinCommunity(req.user.id,communityId);
+    try {
+        await userService.joinCommunity(req.user.id, communityId);
         res.json({
-            data:{
-                message:"User joined community successfully!"
+            data: {
+                message: "User joined community successfully!"
             },
-            error:null
+            error: null
         })
 
-    }catch(err){
+    } catch (err) {
         res.json({
-            error:{
-                message:"somethimg went wrong!",
-                info:err.message
+            error: {
+                message: "somethimg went wrong!",
+                info: err.message
             },
-            data:null
+            data: null
         })
 
     }
 };
 
-const makeHost=async(req,res)=>{
+const makeHost = async (req, res) => {
 
-    try{
-        const userId=req.user._id;
+    try {
+        const userId = req.user._id;
         await userService.makeHost(userId);
         res.json({
-            data:{
-                message:"User role is upgraded to Host!"
+            data: {
+                message: "User role is upgraded to Host!"
             },
-            Error:null
+            Error: null
         })
 
-    }catch(err){
+    } catch (err) {
         res.json({
-            Error:{
-                message:"User role can't be upgraded to Host!",
-                info:err.message
+            Error: {
+                message: "User role can't be upgraded to Host!",
+                info: err.message
             }
         })
     }
+}
+
+const profile = (req, res) => {
+    try {
+        const user = req.user;
+        
+        if(!user){
+            throw new Error("User is not logged in!");  
+        }
+        return res.json({
+            data:{
+                info:"User details fetched successfully!",
+                user
+            },
+            error:null
+        });
+
+    } catch (err) { 
+
+        return res.json({
+            Error:{
+                message:"Failed to fetch user details!",
+                info:err.message
+            },
+            data:null
+        })
+    }
+
+
 }
 
 export default {
     register,
     login,
     joinCommunity,
-    makeHost
+    makeHost,
+    profile
 }

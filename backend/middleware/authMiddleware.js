@@ -11,7 +11,7 @@ export const authMiddleware = async (req, res, next) => {
 
         const data = jwt.verify(token, process.env.JWT_SECRET);
         const email = data.user.email;
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).lean();
 
         if (!user) {
             throw new Error("Invalid payload");
