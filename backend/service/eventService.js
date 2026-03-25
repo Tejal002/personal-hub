@@ -24,6 +24,7 @@ const createEventService=async({name,description,communityId,city,venue,time,hos
     const newEvent=await event.save();
     console.log(newEvent);
 }
+
 const getAllEvents=async({city,keyword})=>{
     const filter={time:{$gte:Date.now()}};
 
@@ -46,8 +47,25 @@ const getAllEvents=async({city,keyword})=>{
     return await Event.find(filter);
 }
 
+const getSpecificEventService=async(id)=>{
+    if(!id)throw new Error("Given id is not valid mongoose id");
+    const event=await Event.findById(id).populate({
+        path:"communityId",
+        select:"name host -_id",
+        populate:{
+            path:"host",
+            select:"name -_id"
+        }
+    });
+
+    if(!event)throw new Error("No event is found with given id!")
+
+    return event
+}
+
 
 export default{
     createEventService,
-    getAllEvents
+    getAllEvents,
+    getSpecificEventService
 }

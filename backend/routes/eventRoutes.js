@@ -8,6 +8,7 @@ const router=express.Router();
 // router.get("/:id",eventController.createEvent);
 router.post("/create",authMiddleware,isHostMiddleware,eventController.createEvent);
 // router.post("/cancel-rsvp",eventController.getEvent);
-router.get("/all",eventController.getAllEvents)
+router.get("/all",eventController.getAllEvents);
+router.get("/specific",eventController.getSpecificEvent);
 
 export default router;
