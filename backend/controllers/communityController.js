@@ -27,7 +27,7 @@ const createCommunity = async (req, res) => {
 const getAllCommunity = async (req, res) => {
 
     try {
-        const communitites = await communityService.getAllCommunityService
+        const communitites = await communityService.getAllCommunityService();
 
         res.json({
             data: {
@@ -49,7 +49,64 @@ const getAllCommunity = async (req, res) => {
     }
 };
 
+const getSpecificCommunity = async (req, res) => {
+
+    const { id } = req.query;
+
+    try {
+        const community = await communityService.getSpecificCommunityService(id);
+
+        res.json({
+            data: {
+                message: "Successfully fetched community details!",
+                community
+            },
+            error: null
+        })
+    } catch (err) {
+        console.log(err);
+        res.json({
+            error: {
+                message: "Failed to fetch communitu details!",
+                info: err.message
+            },
+            data: null
+        })
+
+    }
+}
+
+const getCommunityWithMember = async (req, res) => {
+
+
+    try {
+        const { id } = req.query;       
+        const community = await communityService.getCommunityWithMemberService(id);
+
+        res.json({
+            data: {
+                info: "Successfully fetched community data!",
+                community
+            },
+            error: null
+        })
+
+    } catch (err) {
+        return res.json({
+            error: {
+                message: "Failed to fetched community data with members!",
+                info: err.message
+            },
+            data: null
+        })
+    }
+
+}
+
+
 export default {
     createCommunity,
-    getAllCommunity
+    getAllCommunity,
+    getSpecificCommunity,
+    getCommunityWithMember
 }

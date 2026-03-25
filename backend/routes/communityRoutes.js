@@ -6,6 +6,8 @@ import { isHostMiddleware } from "../middleware/isHostMiddleware.js";
 const router=express.Router();
 
 router.post("/create",authMiddleware,isHostMiddleware,communityController.createCommunity);
-router.get("/all",communityController.getAllCommunity)
+router.get("/all",communityController.getAllCommunity);
+router.get("/getSpecificCommunity",communityController.getSpecificCommunity)
+router.get("/getCommunityWithMembers",communityController.getCommunityWithMember)
 
 export default router;
