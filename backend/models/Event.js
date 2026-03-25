@@ -36,6 +36,11 @@ const eventSchema=new mongoose.Schema({
     },
     capacity:{
         type:Number,
+    },
+    mode:{
+        type:String,
+        enum:["online","offline"],
+        required:true
     }
 });
 

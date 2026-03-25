@@ -1,4 +1,4 @@
-import eventCommunity from "../service/eventCommunity.js";
+import eventCommunity from "../service/eventService.js";
 
 const createEvent=async(req,res)=>{
     try{
@@ -24,11 +24,30 @@ const createEvent=async(req,res)=>{
     
 };
 
-const getEvent=()=>{
+const getAllEvents=async(req,res)=>{
+    try{
+        const {city,keyword}=req.query;
+        const events=await eventCommunity.getAllEvents({city,keyword});
 
+        return res.json({
+            data:{
+                info:"Events fetched successfully!",
+                events
+            },
+            error:null
+        });
+    }catch(err){
+         return res.json({
+            Error:{
+                info:" Failed to fetch Events!",
+                message:err.message
+            },
+            data:null
+        });
+    }
 };
 
 export default {
     createEvent,
-    getEvent
+    getAllEvents
 }

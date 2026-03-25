@@ -5,9 +5,9 @@ import { isHostMiddleware } from "../middleware/isHostMiddleware.js";
 
 const router=express.Router();
 
-router.get("/:id",eventController.createEvent);
-router.post("/rsvp",authMiddleware,isHostMiddleware,eventController.createEvent);
-router.post("/cancel-rsvp",eventController.getEvent);
-
+// router.get("/:id",eventController.createEvent);
+router.post("/create",authMiddleware,isHostMiddleware,eventController.createEvent);
+// router.post("/cancel-rsvp",eventController.getEvent);
+router.get("/all",eventController.getAllEvents)
 
 export default router;

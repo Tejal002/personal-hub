@@ -24,7 +24,30 @@ const createEventService=async({name,description,communityId,city,venue,time,hos
     const newEvent=await event.save();
     console.log(newEvent);
 }
+const getAllEvents=async({city,keyword})=>{
+    const filter={time:{$gte:Date.now()}};
+
+    if(city) filter.city={
+        $regex:city,$options:"i"
+    };
+    if(keyword) filter.$or=[
+        {
+            name:
+            {
+                $regex:keyword,
+                 $options:"i"
+                }},
+        {
+            description:
+            {$regex:keyword, 
+                $options:"i"}},
+    ]
+
+    return await Event.find(filter);
+}
+
 
 export default{
-    createEventService
+    createEventService,
+    getAllEvents
 }

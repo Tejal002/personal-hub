@@ -3,7 +3,10 @@ import communityService from "../service/communityService.js";
 const createCommunity = async (req, res) => {
     try {
         const { name, description, category } = req.body;
-        const { host } = req.user._id;
+        const host = req.user._id;
+      
+        console.log("host:",host);
+       
         await communityService.createCommunityService({ name, description, host, category });
         res.send({
             data: {
