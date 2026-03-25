@@ -118,36 +118,64 @@ const makeHost = async (req, res) => {
 const profile = (req, res) => {
     try {
         const user = req.user;
-        
-        if(!user){
-            throw new Error("User is not logged in!");  
+
+        if (!user) {
+            throw new Error("User is not logged in!");
         }
         return res.json({
-            data:{
-                info:"User details fetched successfully!",
+            data: {
+                info: "User details fetched successfully!",
                 user
             },
-            error:null
+            error: null
         });
 
-    } catch (err) { 
+    } catch (err) {
 
         return res.json({
-            Error:{
-                message:"Failed to fetch user details!",
-                info:err.message
+            Error: {
+                message: "Failed to fetch user details!",
+                info: err.message
             },
-            data:null
+            data: null
         })
     }
 
 
 }
 
+const leaveCommunity = async (req, res) => {
+
+    try {
+        const {_id:userId}=req.user;
+        const {id}=req.params;
+       
+         await userService.leaveCommunityService(userId,id);
+        return res.json({
+            data: {
+                info: "User left community successfylly!"
+            },
+            error: null
+        });
+
+    } catch (err) {
+        return res.json({
+            Error: {
+            info: "Failed to remove user from community!",
+            message: err.message
+        },
+        data:null
+    }
+        );
+    }
+}
+
+
 export default {
     register,
     login,
     joinCommunity,
     makeHost,
-    profile
+    profile,
+    leaveCommunity
 }

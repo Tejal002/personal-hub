@@ -116,9 +116,23 @@ const joinCommunity=async(userId,communityId)=>{
 
 }
 
+const leaveCommunityService=async(userId,id)=>{
+    console.log(userId,id);
+    if(!mongoose.Types.ObjectId.isValid(id)) throw new Error("Community id is not valid mongoose id");
+    const community=await Community.findById(id);
+    if(!community) throw new Error("Community does not exist in the user community list!");
+
+    await User.findByIdAndUpdate(userId,{
+        $pull:{joinedCommunities:id},
+    });
+
+    
+}
+
 export default {
     registerUser,
     login,
     joinCommunity, 
-    makeHost
+    makeHost,
+    leaveCommunityService
 }
