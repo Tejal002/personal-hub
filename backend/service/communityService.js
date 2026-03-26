@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Community from "../models/Community.js";
 import User from "../models/User.js";
+import Event from "../models/Event.js";
 
 const createCommunityService=async({name, description, host, category})=>{
     const inputErr=[];
@@ -62,9 +63,33 @@ const getCommunityWithMemberService=async(id)=>{
 
 }
 
+const deleteCommunityService=async({communityId,userId})=>{
+    console.log(communityId);
+    if(!mongoose.Types.ObjectId.isValid(communityId)) throw new Error("Given community id is not valid mongoose object id!");
+    
+    const community=await Community.findById(communityId);
+    if(!community) throw new Error("Community does not exist!");
+
+    if(!community.host?.equals(userId)) throw new Error("Current user is not a host of this community!")
+
+    await Community.findByIdAndDelete(communityId);
+    await Event.deleteMany({communityId:communityId});
+
+    await User.updateMany(
+        {joinedCommunities:communityId},
+        {
+        $pull:{joinedCommunities:communityId}
+    });
+
+
+
+
+}
+
 export default{
     createCommunityService,
     getAllCommunityService,
     getSpecificCommunityService,
-    getCommunityWithMemberService
+    getCommunityWithMemberService,
+    deleteCommunityService
 }

@@ -9,5 +9,6 @@ router.post("/create",authMiddleware,isHostMiddleware,communityController.create
 router.get("/all",communityController.getAllCommunity);
 router.get("/getSpecificCommunity",communityController.getSpecificCommunity)
 router.get("/getCommunityWithMembers",communityController.getCommunityWithMember)
+router.delete("/:id",authMiddleware,isHostMiddleware,communityController.deleteCommunity);
 
 export default router;
