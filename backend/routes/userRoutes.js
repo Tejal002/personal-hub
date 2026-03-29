@@ -1,6 +1,7 @@
 import express from "express";
 import userController from "../controllers/userController.js"
 import { authMiddleware } from "../middleware/authMiddleware.js";
+import { isMemberMiddleware } from "../middleware/isMemberMiddleware.js";
 const router=express.Router();
 
 router.get("/login",userController.login);
@@ -9,5 +10,5 @@ router.patch("/joinCommunity",authMiddleware,userController.joinCommunity);
 router.patch("/make-host",authMiddleware,userController.makeHost);
 router.get("/me",authMiddleware,userController.profile);
 router.patch("/leave-community/:id",authMiddleware,userController.leaveCommunity);
-router.get("/dashboard",authMiddleware,userController.dashboard)
+router.get("/dashboard",authMiddleware,isMemberMiddleware,userController.dashboard)
 export default router;
