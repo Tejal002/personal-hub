@@ -70,13 +70,15 @@ const login = async (req, res) => {
 
 const joinCommunity = async (req, res) => {
     const { communityId } = req.query;
-    console.log(communityId);
+    const userId=req.user._id;
+   
 
     try {
-        await userService.joinCommunity(req.user.id, communityId);
+        const data=await userService.joinCommunity(userId, communityId);
         res.json({
             data: {
-                message: "User joined community successfully!"
+                message: "User joined community successfully!",
+                data
             },
             error: null
         })
@@ -170,6 +172,30 @@ const leaveCommunity = async (req, res) => {
     }
 }
 
+const dashboard=async(req,res)=>{
+   try{
+    const {_id:userId}=req.user;
+    const dashboard=await userService.dashboardService(userId);
+
+    return res.json({
+        data:{
+            message:"Successfully fetched the dashboard details",
+            dashboard
+        },
+        Error:null
+    });
+
+   }catch(err){
+     return res.json({
+        Error:{
+            message:"failed to fetch the dashboard details",
+            info:err.message
+        },
+        data:null
+    });
+
+   }
+}
 
 export default {
     register,
@@ -177,5 +203,6 @@ export default {
     joinCommunity,
     makeHost,
     profile,
-    leaveCommunity
+    leaveCommunity,
+    dashboard
 }

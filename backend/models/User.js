@@ -31,13 +31,13 @@ const userSchema = new mongoose.Schema({
 
     joinedCommunities: [{  //[3897riuh,jfkh3898,dkdu0940]
         type: mongoose.Schema.Types.ObjectId,
-        ref: "community"
+        ref: "Community"
     },
     ],
 
     rsvpedEvents:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"event",
+        ref:"Event",
     }]
 
 

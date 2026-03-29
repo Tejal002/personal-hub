@@ -105,14 +105,17 @@ const joinCommunity=async(userId,communityId)=>{
     if(!existingCommunity) throw new Error("Community does not exist!");
 
     
-
+   console.log("user id",userId);
       
-
-    await User.findByIdAndUpdate(userId,{
+    const user=await User.findById(userId);
+    console.log("user",user);
+    const data= await User.findByIdAndUpdate(userId,{
         $addToSet:{
            joinedCommunities:communityId 
         }
-    })
+    }, {returnDocument: "after"});
+
+    return data;
 
 }
 
@@ -129,10 +132,22 @@ const leaveCommunityService=async(userId,id)=>{
     
 }
 
+const dashboardService=async(userId)=>{
+    return await User.findById(userId).select("name role joinedCommunities rsvpedEvents").populate({
+        path:"joinedCommunities",
+        select:"name category -_id"
+    }).populate({
+        path:"rsvpedEvents",
+        select:"name city venue time mode -_id",
+        
+    })
+}
+
 export default {
     registerUser,
     login,
     joinCommunity, 
     makeHost,
-    leaveCommunityService
+    leaveCommunityService,
+    dashboardService
 }
