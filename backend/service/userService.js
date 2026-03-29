@@ -143,11 +143,34 @@ const dashboardService=async(userId)=>{
     })
 }
 
+const hostDashboardService=async(userId)=>{
+    const hostDashboard= await User.findById(userId).select("name role joinedCommunities rsvpedEvents")
+    .populate({
+        path:"joinedCommunities",
+        select:"name category host -_id",
+        populate:{
+            path:"host",
+            select:"name -_id"
+        }
+    })
+    .populate({
+        path:"rsvpedEvents",
+        select:"name city venue time mode host -_id",
+        
+    })
+    .lean();
+   
+    const hostedCommunities=await Community.find({host:userId});
+    hostDashboard.hostedCommunities=hostedCommunities;
+    return hostDashboard;
+}
+
 export default {
     registerUser,
     login,
     joinCommunity, 
     makeHost,
     leaveCommunityService,
-    dashboardService
+    dashboardService,
+    hostDashboardService
 }

@@ -197,6 +197,31 @@ const dashboard=async(req,res)=>{
    }
 }
 
+const hostDashboard=async(req,res)=>{
+    try{
+        const {_id}=req.user;
+        if(!_id) throw new Error("user id is not defined!");
+
+        const hostDashBoard=await userService.hostDashboardService(_id);
+        return res.json({
+            Error:{
+                data:"host dashboard is fetched successfully!",
+                hostDashBoard
+            },
+            data:null
+        })
+    }
+    catch(err){
+        return res.json({
+            Error:{
+                message:"Failed to fetch host dashboard data!",
+                info:err.message
+            },
+            data:null
+        })
+    }
+}
+
 export default {
     register,
     login,
@@ -204,5 +229,6 @@ export default {
     makeHost,
     profile,
     leaveCommunity,
-    dashboard
+    dashboard,
+    hostDashboard
 }
